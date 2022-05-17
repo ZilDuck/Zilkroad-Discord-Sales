@@ -1,13 +1,12 @@
 const axios = require('axios');
 require("dotenv").config(); 
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
-const config = require('./config.js')
 
-const testnetString = process.env.is_testnet ? "?network=testnet" : ""
-process.env.is_testnet ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
-const zilliqa = process.env.is_testnet ? new Zilliqa(process.env.testnet_zilliqa) : new Zilliqa(process.env.mainnet_zilliqa);
+const zilliqa = new Zilliqa(process.env.ZILLIQA_API);
 
-const key = process.env.indexer_key
+const zildexrApi = process.env.ZILDEXR_API;
+const key = process.env.ZILDEXR_KEY
+
 module.exports =
 {
     indexApiKey: key,
@@ -15,7 +14,7 @@ module.exports =
     // Contract - GetContractDetails
     GetContractDetails: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/contract/${nft_contract}${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/${nft_contract}${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -23,7 +22,7 @@ module.exports =
     // Contract - GetContractDetails
     GetContractCode: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/contract/${nft_contract}/code${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/${nft_contract}/code${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -31,7 +30,7 @@ module.exports =
     // Contract - GetContractState
     GetContractState: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/contract/${nft_contract}/state${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/contract/${nft_contract}/state${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -39,7 +38,7 @@ module.exports =
     // Address - GetNFTsForAddress
     GetNFTsForAddress: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/address/${nft_contract}/nft${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/address/${nft_contract}/nft${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -47,7 +46,7 @@ module.exports =
     // Address - GetDeployedContractForAddress
     GetDeployedContractsForAddress: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/address/${nft_contract}/contract${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/address/${nft_contract}/contract${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -61,7 +60,7 @@ module.exports =
     // NFT - GetTokenID
     GetTokenID: async function(nft_contract, token_id)
     {
-        const response = await axios.get(`https://api.zildexr.com/nft/${nft_contract}/${token_id}${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/nft/${nft_contract}/${token_id}${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         console.log(response)
         return response
@@ -70,7 +69,7 @@ module.exports =
     // NFT - RefreshTokenID
     RefreshTokenID: async function(nft_contract, token_id)
     {
-        const response = await axios.get(`https://api.zildexr.com/nft/${nft_contract}/${token_id}/refresh${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/nft/${nft_contract}/${token_id}/refresh${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -78,7 +77,7 @@ module.exports =
     // NFT - GetMetadataForTokenID
     GetMetadataForTokenID: async function(nft_contract, token_id)
     {
-        const response = await axios.get(`https://api.zildexr.com/nft/${nft_contract}/${token_id}/metadata${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/nft/${nft_contract}/${token_id}/metadata${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -86,7 +85,7 @@ module.exports =
     // NFT - GetActionsForTokenID
     GetActionsForTokenID: async function(nft_contract, token_id)
     {
-        const response = await axios.get(`https://api.zildexr.com/nft/${nft_contract}/${token_id}/actions${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/nft/${nft_contract}/${token_id}/actions${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response.data
     },
@@ -94,7 +93,7 @@ module.exports =
     // NFT - GetStatisticsForMetadata
     GetStatisticsForMetadata: async function(nft_contract)
     {
-        const response = await axios.get(`https://api.zildexr.com/contract/${nft_contract}/attributes${testnetString}`,
+        const response = await axios.get(`${zildexrApi}/contract/${nft_contract}/attributes${testnetString}`,
                                         { headers: { "X-API-KEY": key } });
         return response
     },
@@ -111,7 +110,7 @@ module.exports =
 GetTransactionsForBlock: async function(block_data)
 {
   let block_transactions = block_data.filter(function (object) {
-    return object.vname == "block" || object.vname == "this_block";
+    return object.vname === "block" || object.vname === "this_block";
   });
   await Promise.all(
     block_transactions.map(async (object) => {

@@ -1,10 +1,9 @@
 require("dotenv").config();
 const { Zilliqa } = require("@zilliqa-js/zilliqa");
 const { StatusType, MessageType } = require("@zilliqa-js/subscriptions");
-const config = require('./config.js')
 
-const zilliqa = process.env.is_testnet ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
-const ws_url = process.env.is_testnet ? config.testnet_ws : config.mainet_ws
+const zilliqa = new Zilliqa(process.env.ZILLIQA_API)
+const ws_url = process.env.ZILLIQA_WS
 console.log(ws_url, zilliqa)
 
 const Big = require('big.js')

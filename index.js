@@ -3,8 +3,12 @@ const { Zilliqa } = require("@zilliqa-js/zilliqa");
 const { StatusType, MessageType } = require("@zilliqa-js/subscriptions");
 const config = require('./config.js')
 
-const zilliqa = process.env.is_testnet ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
-const ws_url = process.env.is_testnet ? config.testnet_ws : config.mainet_ws
+const zilliqa = process.env.IS_TESTNET ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
+const ws_url = process.env.IS_TESTNET ? config.testnet_ws : config.mainet_ws
+console.log(process.env.IS_TESTNET)
+console.log(config.testnet_ws)
+console.log(config.mainnet_ws)
+
 console.log(ws_url, zilliqa)
 
 const Big = require('big.js')

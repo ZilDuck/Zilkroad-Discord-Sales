@@ -6,7 +6,7 @@ const client = new Client({
 client.login(process.env.DISCORD_TOKEN);
 const recently_listed_channel = "904483034638745733";
 const recently_sold_channel = "901599928105725962";
-console.log(`logged into discord with token`)
+console.log(`logged into discord with token${process.env.DISCORD_TOKEN}`)
 const axios = require('axios');
 const {GetTokenID} = require('./indexer.js')
 const { toBech32Address } = require('@zilliqa-js/crypto')

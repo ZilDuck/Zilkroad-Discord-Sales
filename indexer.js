@@ -3,9 +3,9 @@ require("dotenv").config();
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const config = require('./config.js')
 
-const testnetString = process.env.is_testnet ? "?network=testnet" : ""
-process.env.is_testnet ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
-const zilliqa = process.env.is_testnet ? new Zilliqa(process.env.testnet_zilliqa) : new Zilliqa(process.env.mainnet_zilliqa);
+const testnetString = process.env.IS_TESTNET ? "?network=testnet" : ""
+process.env.IS_TESTNET ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
+const zilliqa = process.env.IS_TESTNET ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
 
 const key = process.env.indexer_key
 module.exports =
@@ -169,7 +169,7 @@ GetTransactionHashForBlock: function(block_transactions, nonfungible_contract, t
       });
     });
     if ( updateBlock && id != null) {
-    const url = process.env.is_testnet ? `https://viewblock.io/zilliqa/tx/0x${block.id}` : `https://viewblock.io/zilliqa/tx/0x${block.id}?network=testnet` 
+    const url = process.env.IS_TESTNET ? `https://viewblock.io/zilliqa/tx/0x${block.id}` : `https://viewblock.io/zilliqa/tx/0x${block.id}?network=testnet` 
       block.id = url;
     } else {
       console.log("Could not get transaction hash for some reason");

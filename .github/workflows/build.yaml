@@ -10,7 +10,7 @@ on:
 env:
   AWS_REGION: eu-west-1
   ECR_REPOSITORY: zilkroad-private
-  CONTAINER_NAME: zilkroad_discord_bot
+  CONTAINER_NAME: discord-sales-bot
 
 jobs:
   lint:

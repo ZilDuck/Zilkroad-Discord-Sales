@@ -1,0 +1,30 @@
+image:
+  app:
+    url: 465700395685.dkr.ecr.eu-west-1.amazonaws.com/zilkroad-private/discord-sales-bot
+    tag: latest
+    pullPolicy: IfNotPresent
+    pullSecret: aws-registry
+  filebeat:
+    url: elastic/filebeat:7.17.0
+    pullPolicy: IfNotPresent
+
+namespace: devnet
+
+logPath: /app/logs
+
+replicas: 1
+
+env:
+  discordToken: ~
+  nftMarketplaceAddress: ~
+  testnet: ~
+  zildexr:
+    key: ~
+
+resources:
+  limits:
+    cpu: 0.5
+    memory: 256M
+  requests:
+    cpu: 0.5
+    memory: 256M

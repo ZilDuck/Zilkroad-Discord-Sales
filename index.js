@@ -36,7 +36,7 @@ async function ListenAndRespondToEvents() {
       addresses: [process.env.NFT_MARKETPLACE_ADDRESS],
     }
   );
-  console.log(`Starting listener ${process.env.NFT_MARKETPLACE_ADDRESS} on ${ws_url} `);
+  console.log(`Starting listener ${process.env.NFT_MARKETPLACE_ADDRESS} on ${ws_url}`);
 
   subscriber.emitter.on(MessageType.EVENT_LOG, async (event) => {
       if (event.value) {

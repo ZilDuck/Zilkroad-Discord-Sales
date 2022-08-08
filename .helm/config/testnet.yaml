@@ -1,6 +1,6 @@
 env:
   discordToken: "OTA0NDcwNDUzMjc4NjE3NjAw.GgDcRZ.XlpogCVhHB5TNh5wUmdryQ27ABIyWiZ4_20EyA"
-  nftMarketplaceAddress: "0x552f96a968cac7a910fdeb668181b0f6e50e4fae"
+  nftMarketplaceAddress: "0xa4463b8d05eecd52249521e3d33447b0dceb17fb"
   testnet: true
   zildexr:
     key: "cd66db4a-cfc8-4db3-951c-b9c633566196"

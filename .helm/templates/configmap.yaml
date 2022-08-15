@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  {{ tpl (.Files.Glob "configmap/*").AsConfig $ | nindent 2 }}
+  {{- tpl (.Files.Glob "configmap/*").AsConfig $ | nindent 2 }}

@@ -7,10 +7,11 @@ const {
 } = require('@zilliqa-js/crypto');
 const { StatusType, MessageType } = require("@zilliqa-js/subscriptions");
 const config = require('./config.js')
+const axios = require('axios')
 
-const zilliqa = process.env.IS_TESTNET ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
-const ws_url = process.env.IS_TESTNET ? config.testnet_ws : config.mainet_ws
-console.log(`is_testnet == ${process.env.IS_TESTNET}`)
+const zilliqa = process.env.is_testnet ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
+const ws_url = process.env.is_testnet ? config.testnet_ws : config.mainet_ws
+console.log(`is_testnet == ${process.env.is_testnet}`)
 console.log(`network == ${zilliqa.network.provider.nodeURL}`)
 const Big = require('big.js')
 Big.NE = -60
@@ -34,10 +35,10 @@ async function ListenAndRespondToEvents() {
     ws_url,
     {
       // smart contract address you want to listen on
-      addresses: [process.env.NFT_MARKETPLACE_ADDRESS],
+      addresses: [process.env.nft_marketplace_address],
     }
   );
-  console.log(`Starting listener ${process.env.NFT_MARKETPLACE_ADDRESS} on ${ws_url}`);
+  console.log(`Starting listener ${process.env.nft_marketplace_address} on ${ws_url}`);
 
   subscriber.emitter.on(MessageType.EVENT_LOG, async (event) => {
       if (event.value) {
@@ -86,7 +87,9 @@ async function HandleSold(eventLog)
   console.log(`royalty_recipient ${royalty_recipient}`)  
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
   console.log(`royalty_amount ${royalty_amount}`)  
-
+  const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/sold/${order_id}`)
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.result)
+  console.log(`sold tx ${txLink}`)  
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
   const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
   const nft_state = await nonfungible_contract.getInit();
@@ -118,7 +121,7 @@ async function HandleSold(eventLog)
 
   const message_to_send = await CreateMessageObject(fungible_symbol, amount_decimals, tax_decimals, fungible,
                                 nft_symbol, nonfungible, token_id, bps,
-                                buyer, seller, royalty_recipient, "TODO", block)
+                                buyer, seller, royalty_recipient, block, txLink)
   
   return message_to_send;
 }
@@ -141,6 +144,10 @@ async function HandleListed(eventLog)
   console.log(`block ${block}`)  
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
+
+  const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.result)
+  console.log(`sold tx ${txLink}`) 
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
   console.log(`bech32 ft ${fungible.replace('0x','')}`)
@@ -177,7 +184,7 @@ async function HandleListed(eventLog)
 
   const message_to_send = await CreateMessageObject(fungible_symbol, amount_decimals, 0, fungible,
                                 nft_symbol, nonfungible, token_id, bps,
-                                `0x0000000000000000000000000000000000000000`, lister, `0x0000000000000000000000000000000000000000`, "TODO", block)
+                                `0x0000000000000000000000000000000000000000`, lister, `0x0000000000000000000000000000000000000000`, block, txLink)
   
   return message_to_send;
 }

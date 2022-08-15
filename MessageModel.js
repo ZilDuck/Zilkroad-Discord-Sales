@@ -3,10 +3,10 @@ const { MessageEmbed, Client, Intents, MessageAttachment } = require('discord.js
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.discord_token);
 const recently_listed_channel = "904483034638745733";
 const recently_sold_channel = "901599928105725962";
-console.log(`logged into discord with token == ${process.env.DISCORD_TOKEN}`)
+console.log(`logged into discord with token == ${process.env.discord_token}`)
 const axios = require('axios');
 const {GetTokenID} = require('./indexer.js')
 const { toBech32Address, fromBech32Address } = require('@zilliqa-js/crypto')
@@ -18,7 +18,7 @@ const zilkroad_logo_uri =
 
 async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_tax, fungible_address_b16, 
                             nonfungible_symbol, nonfungible_address_b16, token_id, nonfungible_bps,
-                            buyer_address_b16, seller_address_b16, royalty_address_b16, tx_hash, block_num)
+                            buyer_address_b16, seller_address_b16, royalty_address_b16, block_num, txLink)
 {
 
     const fs = fungible_symbol ?? false
@@ -32,7 +32,7 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var buyaddr = buyer_address_b16 ?? false
     var selladdr = seller_address_b16 ?? false
     var royaladdr = royalty_address_b16 ?? false
-    const tx = tx_hash ?? false
+    const tx = txLink ?? false
     const block = block_num ?? false
     const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b16}/${token_id}`
     console.log(fungible_amount)
@@ -76,7 +76,7 @@ console.log(`${buyaddr} / ${selladdr} / ${token.data.tokenUri} / ${Object.values
         seller_address_b32 : toBech32Address(seller_address_b16),
         royalty_address_b16: royaladdr,
         royalty_address_b32 : toBech32Address(royaladdr),
-        tx_url: `https://viewblock.io/zilliqa/tx/0x${tx}`,
+        tx_url: tx,
         zilkroad_url: zilkroad_url,
         block_num: block
     }

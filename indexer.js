@@ -7,7 +7,7 @@ const testnetString = process.env.IS_TESTNET ? "?network=testnet" : ""
 process.env.IS_TESTNET ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
 const zilliqa = process.env.IS_TESTNET ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
 
-const key = process.env.indexer_key
+const key = process.env.APIKEY
 module.exports =
 {
     indexApiKey: key,

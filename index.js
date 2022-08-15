@@ -1,16 +1,17 @@
 require("dotenv").config();
-const { Zilliqa } = require("@zilliqa-js/zilliqa");
+const { BN, Long, bytes, units } = require('@zilliqa-js/util');
+const { Zilliqa } = require('@zilliqa-js/zilliqa');
+const {
+  toBech32Address,
+  getAddressFromPrivateKey,
+} = require('@zilliqa-js/crypto');
 const { StatusType, MessageType } = require("@zilliqa-js/subscriptions");
 const config = require('./config.js')
 
 const zilliqa = process.env.IS_TESTNET ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
 const ws_url = process.env.IS_TESTNET ? config.testnet_ws : config.mainet_ws
-console.log(process.env.IS_TESTNET)
-console.log(config.testnet_ws)
-console.log(config.mainnet_ws)
-
-console.log(ws_url, zilliqa)
-
+console.log(`is_testnet == ${process.env.IS_TESTNET}`)
+console.log(`network == ${zilliqa.network.provider.nodeURL}`)
 const Big = require('big.js')
 Big.NE = -60
 Big.PE = 60
@@ -86,8 +87,8 @@ async function HandleSold(eventLog)
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
   console.log(`royalty_amount ${royalty_amount}`)  
 
-  const nonfungible_contract = zilliqa.contracts.at(nonfungible.replace("0x",""));
-  const fungible_contract = zilliqa.contracts.at(fungible.replace("0x",""));
+  const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
+  const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
   const nft_state = await nonfungible_contract.getInit();
   const ft_state = await fungible_contract.getInit();
 
@@ -141,10 +142,16 @@ async function HandleListed(eventLog)
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
 
-  const nonfungible_contract = zilliqa.contracts.at(nonfungible);
-  const fungible_contract = zilliqa.contracts.at(fungible.replace("0x",""));
+  console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
+  console.log(`bech32 ft ${fungible.replace('0x','')}`)
+  const nonfungible_contract = zilliqa.contracts.at(nonfungible.replace('0x',''));
+  const fungible_contract = zilliqa.contracts.at(fungible.replace('0x',''));
+  console.log(nonfungible_contract)
+  console.log(fungible_contract)
   const nft_state = await nonfungible_contract.getInit();
   const ft_state = await fungible_contract.getInit();
+  console.log(nft_state)
+  console.log(ft_state)
 
   const nft_symbol = nft_state.reduce(
     (prev, value) => ({ ...prev, [value.vname]: value }),

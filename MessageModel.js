@@ -3,13 +3,13 @@ const { MessageEmbed, Client, Intents, MessageAttachment } = require('discord.js
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.discord_token);
 const recently_listed_channel = "904483034638745733";
 const recently_sold_channel = "901599928105725962";
-console.log(`logged into discord with token${process.env.DISCORD_TOKEN}`)
+console.log(`logged into discord with token == ${process.env.discord_token}`)
 const axios = require('axios');
 const {GetTokenID} = require('./indexer.js')
-const { toBech32Address } = require('@zilliqa-js/crypto')
+const { toBech32Address, fromBech32Address } = require('@zilliqa-js/crypto')
 const Big = require('big.js')
 const zilkroad_logo_uri =
   "https://pbs.twimg.com/profile_images/1456396384819625984/uCeLltRG_400x400.jpg";
@@ -18,7 +18,7 @@ const zilkroad_logo_uri =
 
 async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_tax, fungible_address_b16, 
                             nonfungible_symbol, nonfungible_address_b16, token_id, nonfungible_bps,
-                            buyer_address_b16, seller_address_b16, royalty_address_b16, tx_hash, block_num)
+                            buyer_address_b16, seller_address_b16, royalty_address_b16, block_num, txLink)
 {
 
     const fs = fungible_symbol ?? false
@@ -32,14 +32,14 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var buyaddr = buyer_address_b16 ?? false
     var selladdr = seller_address_b16 ?? false
     var royaladdr = royalty_address_b16 ?? false
-    const tx = tx_hash ?? false
+    const tx = txLink ?? false
     const block = block_num ?? false
     const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b16}/${token_id}`
     console.log(fungible_amount)
     const usd = await getUSDValuefromTokens(fs, fa)
     var text
     var colour
-    const now = new Date();
+    const now = new Date().toUTCString();
 
     if(buyaddr === '0x0000000000000000000000000000000000000000')
     {
@@ -76,7 +76,7 @@ console.log(`${buyaddr} / ${selladdr} / ${token.data.tokenUri} / ${Object.values
         seller_address_b32 : toBech32Address(seller_address_b16),
         royalty_address_b16: royaladdr,
         royalty_address_b32 : toBech32Address(royaladdr),
-        tx_url: `https://viewblock.io/zilliqa/tx/0x${tx}`,
+        tx_url: tx,
         zilkroad_url: zilkroad_url,
         block_num: block
     }
@@ -90,15 +90,16 @@ async function SendSoldMessage(messageObject)
         .setTitle(messageObject.text)
         .setURL(messageObject.zilkroad_url)
         .setDescription(messageObject.zilkroad_url)
-        .setThumbnail(messageObject.token_uri)
+        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .addFields(
             { name: 'Buyer', value: messageObject.buyer_address_b32},
             { name: 'Seller', value: messageObject.seller_address_b32},
-            { name: 'Amount', value: `${messageObject.fungible_symbol}/${messageObject.fungible_amount}`},           
+            { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},           
             { name: 'Royalty Recipient', value: messageObject.royalty_address_b32},
             { name: 'Royalty Amount', value: `${messageObject.fungible_symbol}/${messageObject.fungible_tax}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`}
         )
+        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setTimestamp()
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
@@ -115,15 +116,17 @@ async function SendListedMessage(messageObject)
         .setTitle(messageObject.text)
         .setURL(messageObject.zilkroad_url)
         .setDescription(messageObject.zilkroad_url)
-        .setThumbnail(messageObject.token_uri)
+        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .addFields(
             { name: 'Lister', value: messageObject.seller_address_b32},
-            { name: 'Amount', value: `${messageObject.fungible_symbol}/${messageObject.fungible_amount.toString()}`},
-            { name: 'NFT/Token', value: `${messageObject.nonfungible_address_b32}/${messageObject.nonfungible_symbol}/${messageObject.token_id}`},
+            { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},
+            { name: 'NFT address', value: `${messageObject.nonfungible_address_b32}`},           
+            { name: 'NFT Symbol/Token', value: `${messageObject.nonfungible_symbol}/${messageObject.token_id}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`},
             { name: 'USD', value: `${messageObject.usd_value}`}
         )
         .setTimestamp()
+        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
 

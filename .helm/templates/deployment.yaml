@@ -22,6 +22,15 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.app.url }}:{{ .Values.image.app.tag }}"
           imagePullPolicy: {{ .Values.image.app.pullPolicy }}
+          env:
+            - name: DISCORD_TOKEN
+              value: {{ .Values.env.discordToken | quote }}
+            - name: NFT_MARKETPLACE_ADDRESS
+              value: {{ .Values.env.nftMarketplaceAddress | quote }}
+            - name: IS_TESTNET
+              value: {{ .Values.env.testnet | quote }}
+            - name: INDEXER_KEY
+              value: {{ .Values.env.zildexr.key | quote }}
           resources:
             limits:
               cpu: {{ .Values.resources.limits.cpu | quote }}

@@ -4,12 +4,13 @@ const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 client.login(process.env.discord_token);
-const recently_listed_channel = "904483034638745733";
-const recently_sold_channel = "901599928105725962";
+const recently_listed_channel = process.env.recently_listed_channel;
+const recently_sold_channel = process.env.recently_sold_channel;
+console.log(`using sold channel ${recently_listed_channel} // using listed channel ${recently_sold_channel}`)
 console.log(`logged into discord with token == ${process.env.discord_token}`)
 const axios = require('axios');
 const {GetTokenID} = require('./indexer.js')
-const { toBech32Address, fromBech32Address } = require('@zilliqa-js/crypto')
+const { toBech32Address } = require('@zilliqa-js/crypto')
 const Big = require('big.js')
 const zilkroad_logo_uri =
   "https://pbs.twimg.com/profile_images/1456396384819625984/uCeLltRG_400x400.jpg";

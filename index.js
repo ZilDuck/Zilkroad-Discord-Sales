@@ -1,11 +1,9 @@
 require("dotenv").config();
-const { BN, Long, bytes, units } = require('@zilliqa-js/util');
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const {
-  toBech32Address,
-  getAddressFromPrivateKey,
+  toBech32Address
 } = require('@zilliqa-js/crypto');
-const { StatusType, MessageType } = require("@zilliqa-js/subscriptions");
+const { MessageType } = require("@zilliqa-js/subscriptions");
 const config = require('./config.js')
 const axios = require('axios')
 

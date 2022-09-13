@@ -22,6 +22,19 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.app.url }}:{{ .Values.image.app.tag }}"
           imagePullPolicy: {{ .Values.image.app.pullPolicy }}
+          env:
+            - name: discord_token
+              value: {{ .Values.env.discordToken | quote }}
+            - name: nft_marketplace_address
+              value: {{ .Values.env.nftMarketplaceAddress | quote }}
+            - name: is_testnet
+              value: {{ .Values.env.testnet | quote }}
+            - name: indexer_key
+              value: {{ .Values.env.zildexr.key | quote }}
+            - name: recently_listed_channel
+              value: {{ .Values.env.discordChannels.listed | quote }}
+            - name: recently_sold_channel
+              value: {{ .Values.env.discordChannels.sold | quote }}
           resources:
             limits:
               cpu: {{ .Values.resources.limits.cpu | quote }}

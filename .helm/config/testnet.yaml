@@ -1,5 +1,8 @@
 env:
   discordToken: "OTA0NDcwNDUzMjc4NjE3NjAw.GgDcRZ.XlpogCVhHB5TNh5wUmdryQ27ABIyWiZ4_20EyA"
+  discordChannels:
+    listed: 904483034638745733
+    sold: 901599928105725962
   nftMarketplaceAddress: "0xa4463b8d05eecd52249521e3d33447b0dceb17fb"
   testnet: true
   zildexr:

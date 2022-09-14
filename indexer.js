@@ -7,11 +7,9 @@ const testnetString = process.env.is_testnet ? "?network=testnet" : ""
 process.env.is_testnet ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
 const zilliqa = process.env.is_testnet ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
 
-const key = process.env.apikey
+const key = process.env.indexer_key
 module.exports =
 {
-    indexapikey: key,
-
     // Contract - GetContractDetails
     GetContractDetails: async function(nft_contract)
     {

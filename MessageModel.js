@@ -104,9 +104,7 @@ async function SendSoldMessage(messageObject)
         .setTimestamp()
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
-
-    const channel = client.channels.cache.get(recently_sold_channel);
-    channel.send({ embeds: [exampleEmbed] });
+        client.channels.cache.get(recently_sold_channel).send(exampleEmbed)
 }
 
 async function SendListedMessage(messageObject)
@@ -130,9 +128,7 @@ async function SendListedMessage(messageObject)
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
-
-    const channel = client.channels.cache.get(recently_listed_channel);
-    channel.send({ embeds: [exampleEmbed] });
+        client.channels.cache.get(recently_listed_channel).send(exampleEmbed)
 }
 
 // to do
@@ -158,11 +154,11 @@ async function getUSDValuefromTokens(ticker, numberOfTokens)
   const decimals = token_info.data.decimals;
 
   const numberWithDecimal = new Big(numberOfTokens).div(new Big(10).pow(decimals));
-  console.log(`${numberWithDecimal} blockchain amount`)
+  //console.log(`${numberWithDecimal} blockchain amount`)
 
   // TODO break each one into new method
   const tradedValueUSD = new Big(usd_rate).mul(numberWithDecimal).round(2);
   const oneTokenAsUSD = new Big(usd_rate).round(2);
-  console.log(`trade value of ${ticker} is ${tradedValueUSD} // 1 token as USD 2DP ${oneTokenAsUSD}`)
+  //console.log(`trade value of ${ticker} is ${tradedValueUSD} // 1 token as USD 2DP ${oneTokenAsUSD}`)
   return tradedValueUSD
 }

@@ -84,9 +84,10 @@ async function HandleSold(eventLog)
   const royalty_recipient = getVname(eventLog.params, "royalty_recipient");
   console.log(`royalty_recipient ${royalty_recipient}`)  
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
-  console.log(`royalty_amount ${royalty_amount}`)  
+  console.log(`royalty_amount ${royalty_amount}`)
+  await new Promise(r => setTimeout(r, 2000));
   const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/sold/${order_id}`)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.result)
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.data[0].tx_hash)
   console.log(`sold tx ${txLink}`)  
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
   const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
@@ -143,9 +144,10 @@ async function HandleListed(eventLog)
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
 
+  await new Promise(r => setTimeout(r, 2000));
   const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.result)
-  console.log(`sold tx ${txLink}`) 
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.data[0].tx_hash)
+ 
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
   console.log(`bech32 ft ${fungible.replace('0x','')}`)

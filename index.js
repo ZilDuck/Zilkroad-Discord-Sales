@@ -14,6 +14,10 @@ console.log(`network == ${zilliqa.network.provider.nodeURL}`)
 const Big = require('big.js')
 Big.NE = -60
 Big.PE = 60
+
+var testnetPrefix
+process.env.is_testnet ? testnetPrefix = '?network=testnet' : ""
+console.log(`testnetPrefix == ${testnetPrefix}`)
   
 const {    
   CreateMessageObject,
@@ -87,7 +91,7 @@ async function HandleSold(eventLog)
   console.log(`royalty_amount ${royalty_amount}`)
   await new Promise(r => setTimeout(r, 2000));
   const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/sold/${order_id}`)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.data[0].tx_hash)
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
   console.log(`sold tx ${txLink}`)  
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
   const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
@@ -146,7 +150,7 @@ async function HandleListed(eventLog)
 
   await new Promise(r => setTimeout(r, 2000));
   const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + JSON.stringify(tx.data[0].tx_hash)
+  const txLink = 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
  
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)

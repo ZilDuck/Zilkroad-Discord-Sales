@@ -105,7 +105,7 @@ async function SendSoldMessage(messageObject)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
         const channel = client.channels.cache.get(recently_sold_channel)
-        channel.send(exampleEmbed)
+        await channel.send({embeds: [exampleEmbed]})
 }
 
 async function SendListedMessage(messageObject)
@@ -128,9 +128,15 @@ async function SendListedMessage(messageObject)
         .setTimestamp()
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
-        
+
+
         const channel = client.channels.cache.get(recently_listed_channel)
-        channel.send(exampleEmbed)
+
+        console.log('1', exampleEmbed)
+        console.log('2', channel)
+        console.log('3', recently_listed_channel)
+        console.log('4', recently_listed_channel.toString())
+        await channel.send({embeds: [exampleEmbed]})
 }
 
 // to do

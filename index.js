@@ -113,10 +113,10 @@ async function HandleSold(eventLog)
   ).decimals.value; 
   console.log(`fungible_decimals ${fungible_decimals}`) 
 
-  const amount_decimals = new Big(fungible_amount).div(new Big(10).pow(parseInt(fungible_decimals)))
-  const tax_decimals = new Big(royalty_amount).div(new Big(10).pow(parseInt(fungible_decimals)))
+  const amount_decimals = new Big(fungible_amount).div(new Big(10).pow(parseInt(fungible_decimals))).toString()
+  const tax_decimals = new Big(royalty_amount).div(new Big(10).pow(parseInt(fungible_decimals))).toString()
 
-  const bps = await GetRoyaltyBPSForToken(nonfungible_contract)
+  const bps = await GetRoyaltyBPSForToken(nonfungible)
 
   const message_to_send = await CreateMessageObject(fungible_symbol, amount_decimals, tax_decimals, fungible,
                                 nft_symbol, nonfungible, token_id, bps,
@@ -178,7 +178,7 @@ async function HandleListed(eventLog)
   ).decimals.value; 
   console.log(`fungible_decimals ${fungible_decimals}`) 
 
-  const amount_decimals = new Big(sell_price).div(new Big(10).pow(parseInt(fungible_decimals)))
+  const amount_decimals = new Big(sell_price).div(new Big(10).pow(parseInt(fungible_decimals))).toString()
 
   const bps = await GetRoyaltyBPSForToken(nonfungible)
 

@@ -104,7 +104,8 @@ async function SendSoldMessage(messageObject)
         .setTimestamp()
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
-        client.channels.cache.get(recently_sold_channel).send(exampleEmbed)
+        const channel = client.channels.cache.get(recently_sold_channel)
+        channel.send(exampleEmbed)
 }
 
 async function SendListedMessage(messageObject)
@@ -127,8 +128,9 @@ async function SendListedMessage(messageObject)
         .setTimestamp()
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
-
-        client.channels.cache.get(recently_listed_channel).send(exampleEmbed)
+        
+        const channel = client.channels.cache.get(recently_listed_channel)
+        channel.send(exampleEmbed)
 }
 
 // to do
@@ -160,5 +162,5 @@ async function getUSDValuefromTokens(ticker, numberOfTokens)
   const tradedValueUSD = new Big(usd_rate).mul(numberWithDecimal).round(2);
   const oneTokenAsUSD = new Big(usd_rate).round(2);
   //console.log(`trade value of ${ticker} is ${tradedValueUSD} // 1 token as USD 2DP ${oneTokenAsUSD}`)
-  return tradedValueUSD
+  return String(tradedValueUSD)
 }

@@ -89,8 +89,9 @@ async function HandleSold(eventLog)
   console.log(`royalty_recipient ${royalty_recipient}`)  
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
   console.log(`royalty_amount ${royalty_amount}`)
-  await new Promise(r => setTimeout(r, 2000));
+
   const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/sold/${order_id}`)
+  console.log(tx)
   const txLink = 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
   console.log(`sold tx ${txLink}`)  
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
@@ -148,10 +149,7 @@ async function HandleListed(eventLog)
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
 
-  await new Promise(r => setTimeout(r, 2000));
-  const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
- 
+  const tx = getTX(order_id)
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
   console.log(`bech32 ft ${fungible.replace('0x','')}`)
@@ -188,9 +186,42 @@ async function HandleListed(eventLog)
 
   const message_to_send = await CreateMessageObject(fungible_symbol, amount_decimals, 0, fungible,
                                 nft_symbol, nonfungible, token_id, bps,
-                                `0x0000000000000000000000000000000000000000`, lister, `0x0000000000000000000000000000000000000000`, block, txLink)
+                                `0x0000000000000000000000000000000000000000`, lister, `0x0000000000000000000000000000000000000000`, block, tx)
   
   return message_to_send;
 }
 
 ListenAndRespondToEvents();
+
+async function getTX(order_id)
+{
+  var retrys = 0
+  const maxRetry = 5
+  const milliesToWait = 2000
+  try{
+    var tx 
+    for(var i=0; i<=5; i++)
+    {
+      tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
+      if(tx.data[0]?.tx_hash)
+      {
+        console.log(`got tx up`)
+        return 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
+      }
+      else if(retrys == maxRetry)
+      {
+        console.error(`giving up getting tx `)
+        return 'https://viewblock.io/zilliqa/tx/' + testnetPrefix
+      }
+      else {
+        retrys++
+        await new Promise(r => setTimeout(r, milliesToWait));
+        console.log(`no hit, awaiting ${i++}/${maxRetry}`)
+      }
+    }
+  }
+  catch(e)
+  {
+    console.error(`TX error`, e)
+  }
+}

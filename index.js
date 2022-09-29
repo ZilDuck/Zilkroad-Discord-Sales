@@ -90,10 +90,8 @@ async function HandleSold(eventLog)
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
   console.log(`royalty_amount ${royalty_amount}`)
 
-  const tx = await axios.get(`https://staging-public-api.zilkroad.io/order/sold/${order_id}`)
-  console.log(tx)
-  const txLink = 'https://viewblock.io/zilliqa/tx/' + tx.data[0].tx_hash + testnetPrefix
-  console.log(`sold tx ${txLink}`)  
+  const tx = await getTX(order_id)
+
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
   const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
   const nft_state = await nonfungible_contract.getInit();
@@ -125,7 +123,7 @@ async function HandleSold(eventLog)
 
   const message_to_send = await CreateMessageObject(fungible_symbol, amount_decimals, tax_decimals, fungible,
                                 nft_symbol, nonfungible, token_id, bps,
-                                buyer, seller, royalty_recipient, block, txLink)
+                                buyer, seller, royalty_recipient, block, tx)
   
   return message_to_send;
 }
@@ -149,7 +147,7 @@ async function HandleListed(eventLog)
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
 
-  const tx = getTX(order_id)
+  const tx = await getTX(order_id)
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
   console.log(`bech32 ft ${fungible.replace('0x','')}`)

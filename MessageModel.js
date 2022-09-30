@@ -97,7 +97,7 @@ async function SendSoldMessage(messageObject)
             { name: 'Seller', value: messageObject.seller_address_b32},
             { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},           
             { name: 'Royalty Recipient', value: messageObject.royalty_address_b32},
-            { name: 'Royalty Amount', value: `${messageObject.fungible_symbol}/${messageObject.fungible_tax}`},
+            { name: 'Royalty Amount', value: `${messageObject.fungible_tax} ${messageObject.fungible_symbol}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`}
         )
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)

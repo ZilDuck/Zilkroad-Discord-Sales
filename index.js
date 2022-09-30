@@ -90,7 +90,7 @@ async function HandleSold(eventLog)
   const royalty_amount = getVname(eventLog.params, "royalty_amount");
   console.log(`royalty_amount ${royalty_amount}`)
 
-  const tx = await getTX(order_id)
+  const tx = await getTX(order_id, 'sold')
 
   const nonfungible_contract = zilliqa.contracts.at(toBech32Address(nonfungible.replace('0x','')));
   const fungible_contract = zilliqa.contracts.at(toBech32Address(fungible.replace('0x','')));
@@ -147,7 +147,7 @@ async function HandleListed(eventLog)
   const order_id = getVname(eventLog.params, "oid");
   console.log(`order ${order_id}`)  
 
-  const tx = await getTX(order_id)
+  const tx = await getTX(order_id, 'listed')
 
   console.log(`bech32 nft ${nonfungible.replace('0x','')}`)
   console.log(`bech32 ft ${fungible.replace('0x','')}`)
@@ -191,7 +191,7 @@ async function HandleListed(eventLog)
 
 ListenAndRespondToEvents();
 
-async function getTX(order_id)
+async function getTX(order_id, type)
 {
   var retrys = 0
   const maxRetry = 5
@@ -200,7 +200,7 @@ async function getTX(order_id)
     var tx 
     for(var i=0; i<=5; i++)
     {
-      tx = await axios.get(`https://staging-public-api.zilkroad.io/order/listed/${order_id}`)
+      tx = await axios.get(`https://staging-public-api.zilkroad.io/order/${type}/${order_id}`)
       if(tx.data[0]?.tx_hash)
       {
         console.log(`got tx up`)

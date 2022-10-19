@@ -3,7 +3,7 @@ env:
   discordChannels:
     listed: "904483034638745733"
     sold: "901599928105725962"
-  nftMarketplaceAddress: "0x7ff10124194f23e7478614026c125b8a9fd74bcf"
+  nftMarketplaceAddress: "0xad43392d1750771e58931801ddc274e5984660b4"
   testnet: true
   zildexr:
     key: "cd66db4a-cfc8-4db3-951c-b9c633566196"

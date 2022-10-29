@@ -35,7 +35,7 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var royaladdr = royalty_address_b16 ?? false
     const tx = txLink ?? false
     const block = block_num ?? false
-    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b16}/${token_id}`
+    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b32}/${token_id}`
     console.log(fungible_amount)
     const usd = await getUSDValuefromTokens(fs, fa)
     var text

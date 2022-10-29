@@ -98,7 +98,8 @@ async function SendSoldMessage(messageObject)
             { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},           
             { name: 'Royalty Recipient', value: messageObject.royalty_address_b32},
             { name: 'Royalty Amount', value: `${messageObject.fungible_tax} ${messageObject.fungible_symbol}`},
-            { name: 'TransactionID', value: `${messageObject.tx_url}`}
+            { name: 'TransactionID', value: `${messageObject.tx_url}`},
+            { name: 'USD after taxes', value: `${messageObject.usd_value}`}
         )
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setTimestamp()
@@ -123,7 +124,7 @@ async function SendListedMessage(messageObject)
             { name: 'NFT address', value: `${messageObject.nonfungible_address_b32}`},           
             { name: 'NFT Symbol/Token', value: `${messageObject.nonfungible_symbol}/${messageObject.token_id}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`},
-            { name: 'USD', value: `${messageObject.usd_value}`}
+            { name: 'Listed USD', value: `${messageObject.usd_value}`}
         )
         .setTimestamp()
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)

@@ -91,7 +91,7 @@ async function SendSoldMessage(messageObject)
         .setTitle(messageObject.text)
         .setURL(messageObject.zilkroad_url)
         .setDescription(messageObject.zilkroad_url)
-        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b32}/${messageObject.token_id}`)
+        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .addFields(
             { name: 'Buyer', value: messageObject.buyer_address_b32},
             { name: 'Seller', value: messageObject.seller_address_b32},
@@ -100,7 +100,7 @@ async function SendSoldMessage(messageObject)
             { name: 'Royalty Amount', value: `${messageObject.fungible_tax} ${messageObject.fungible_symbol}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`}
         )
-        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b32}/${messageObject.token_id}`)
+        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setTimestamp()
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
@@ -116,7 +116,7 @@ async function SendListedMessage(messageObject)
         .setTitle(messageObject.text)
         .setURL(messageObject.zilkroad_url)
         .setDescription(messageObject.zilkroad_url)
-        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b32}/${messageObject.token_id}`)
+        .setThumbnail(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .addFields(
             { name: 'Lister', value: messageObject.seller_address_b32},
             { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},
@@ -126,7 +126,7 @@ async function SendListedMessage(messageObject)
             { name: 'USD', value: `${messageObject.usd_value}`}
         )
         .setTimestamp()
-        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b32}/${messageObject.token_id}`)
+        .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setFooter(`zilkroad.io`, zilkroad_logo_uri);
 
 

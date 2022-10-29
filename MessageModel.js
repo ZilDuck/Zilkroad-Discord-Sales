@@ -35,7 +35,7 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var royaladdr = royalty_address_b16 ?? false
     const tx = txLink ?? false
     const block = block_num ?? false
-    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b16}/${token_id}`
+    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b32}/${token_id}`
     console.log(fungible_amount)
     const usd = await getUSDValuefromTokens(fs, fa)
     var text
@@ -152,21 +152,15 @@ module.exports =
 
 async function getUSDValuefromTokens(ticker, numberOfTokens) 
 {
+  if(numberOfTokens == 0 || numberOfTokens == undefined) return 0.0
   // account for wzil
-  const final_ticker = ticker.toLowerCase() == "wzil" ? "zil" : ticker;
+  const final_fungible = ticker.toLowerCase() == "wzil" ? "zil" : ticker;
   const token_info =
   (
-    await axios.get(`https://api.zilstream.com/tokens/${final_ticker}`)
+    await axios.get(`https://api.zilstream.com/tokens/${final_fungible}`)
   )
   const usd_rate = token_info.data.rate_usd;
-  const decimals = token_info.data.decimals;
 
-  const numberWithDecimal = new Big(numberOfTokens).div(new Big(10).pow(decimals));
-  //console.log(`${numberWithDecimal} blockchain amount`)
-
-  // TODO break each one into new method
-  const tradedValueUSD = new Big(usd_rate).mul(numberWithDecimal).round(2);
-  const oneTokenAsUSD = new Big(usd_rate).round(2);
-  //console.log(`trade value of ${ticker} is ${tradedValueUSD} // 1 token as USD 2DP ${oneTokenAsUSD}`)
-  return String(tradedValueUSD)
+  const tradedValueUSD = new Big(usd_rate).mul(numberOfTokens).round(2);
+  return parseFloat(tradedValueUSD)
 }

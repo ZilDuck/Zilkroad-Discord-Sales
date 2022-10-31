@@ -14,7 +14,6 @@ const { toBech32Address } = require('@zilliqa-js/crypto')
 const Big = require('big.js')
 const zilkroad_logo_uri =
   "https://pbs.twimg.com/profile_images/1456396384819625984/uCeLltRG_400x400.jpg";
-  const { toBech32Address } = require('@zilliqa-js/zilliqa')
 
 
 async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_tax, fungible_address_b16, 

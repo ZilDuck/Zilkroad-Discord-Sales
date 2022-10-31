@@ -14,7 +14,7 @@ const { toBech32Address } = require('@zilliqa-js/crypto')
 const Big = require('big.js')
 const zilkroad_logo_uri =
   "https://pbs.twimg.com/profile_images/1456396384819625984/uCeLltRG_400x400.jpg";
-
+  const { toBech32Address } = require('@zilliqa-js/zilliqa')
 
 
 async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_tax, fungible_address_b16, 
@@ -35,7 +35,7 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var royaladdr = royalty_address_b16 ?? false
     const tx = txLink ?? false
     const block = block_num ?? false
-    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b32}/${token_id}`
+    const zilkroad_url = `https://staging.zilkroad.io/collection/${toBech32Address(nonfungible_address_b16)}/${token_id}`
     console.log(fungible_amount)
     const usd = await getUSDValuefromTokens(fs, fa)
     var text

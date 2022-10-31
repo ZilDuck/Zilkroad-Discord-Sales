@@ -16,7 +16,6 @@ const zilkroad_logo_uri =
   "https://pbs.twimg.com/profile_images/1456396384819625984/uCeLltRG_400x400.jpg";
 
 
-
 async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_tax, fungible_address_b16, 
                             nonfungible_symbol, nonfungible_address_b16, token_id, nonfungible_bps,
                             buyer_address_b16, seller_address_b16, royalty_address_b16, block_num, txLink)
@@ -35,7 +34,7 @@ async function CreateMessageObject(fungible_symbol, fungible_amount, fungible_ta
     var royaladdr = royalty_address_b16 ?? false
     const tx = txLink ?? false
     const block = block_num ?? false
-    const zilkroad_url = `https://staging.zilkroad.io/collection/${nonfungible_address_b16}/${token_id}`
+    const zilkroad_url = `https://staging.zilkroad.io/collection/${toBech32Address(nonfungible_address_b16)}/${token_id}`
     console.log(fungible_amount)
     const usd = await getUSDValuefromTokens(fs, fa)
     var text
@@ -98,7 +97,8 @@ async function SendSoldMessage(messageObject)
             { name: 'Amount', value: `${messageObject.fungible_amount} ${messageObject.fungible_symbol}`},           
             { name: 'Royalty Recipient', value: messageObject.royalty_address_b32},
             { name: 'Royalty Amount', value: `${messageObject.fungible_tax} ${messageObject.fungible_symbol}`},
-            { name: 'TransactionID', value: `${messageObject.tx_url}`}
+            { name: 'TransactionID', value: `${messageObject.tx_url}`},
+            { name: 'USD after taxes', value: `${messageObject.usd_value}`}
         )
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
         .setTimestamp()
@@ -123,7 +123,7 @@ async function SendListedMessage(messageObject)
             { name: 'NFT address', value: `${messageObject.nonfungible_address_b32}`},           
             { name: 'NFT Symbol/Token', value: `${messageObject.nonfungible_symbol}/${messageObject.token_id}`},
             { name: 'TransactionID', value: `${messageObject.tx_url}`},
-            { name: 'USD', value: `${messageObject.usd_value}`}
+            { name: 'Listed USD', value: `${messageObject.usd_value}`}
         )
         .setTimestamp()
         .setImage(`https://zildexr-testnet.b-cdn.net/${messageObject.nonfungible_address_b16}/${messageObject.token_id}`)
@@ -152,21 +152,15 @@ module.exports =
 
 async function getUSDValuefromTokens(ticker, numberOfTokens) 
 {
+  if(numberOfTokens == 0 || numberOfTokens == undefined) return 0.0
   // account for wzil
-  const final_ticker = ticker.toLowerCase() == "wzil" ? "zil" : ticker;
+  const final_fungible = ticker.toLowerCase() == "wzil" ? "zil" : ticker;
   const token_info =
   (
-    await axios.get(`https://api.zilstream.com/tokens/${final_ticker}`)
+    await axios.get(`https://api.zilstream.com/tokens/${final_fungible}`)
   )
   const usd_rate = token_info.data.rate_usd;
-  const decimals = token_info.data.decimals;
 
-  const numberWithDecimal = new Big(numberOfTokens).div(new Big(10).pow(decimals));
-  //console.log(`${numberWithDecimal} blockchain amount`)
-
-  // TODO break each one into new method
-  const tradedValueUSD = new Big(usd_rate).mul(numberWithDecimal).round(2);
-  const oneTokenAsUSD = new Big(usd_rate).round(2);
-  //console.log(`trade value of ${ticker} is ${tradedValueUSD} // 1 token as USD 2DP ${oneTokenAsUSD}`)
-  return String(tradedValueUSD)
+  const tradedValueUSD = new Big(usd_rate).mul(numberOfTokens).round(2);
+  return parseFloat(tradedValueUSD)
 }

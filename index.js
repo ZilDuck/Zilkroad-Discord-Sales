@@ -200,7 +200,7 @@ async function getTX(order_id, type)
     var tx 
     for(var i=0; i<=5; i++)
     {
-      tx = await axios.get(`https://staging-public-api.zilkroad.io/order/${type}/${order_id}`)
+      tx = await axios.get(`https://testnet-public-api.zilkroad.io/order/${type}/${order_id}`)
       if(tx.data[0]?.tx_hash)
       {
         console.log(`got tx up`)

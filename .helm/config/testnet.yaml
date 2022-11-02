@@ -7,3 +7,5 @@ env:
   testnet: true
   zildexr:
     key: "cd66db4a-cfc8-4db3-951c-b9c633566196"
+
+replicas: 0

@@ -1,8 +1,11 @@
 env:
-  discord_token: ~
-  nftMarketplaceAddress: ~
+  discordToken: "OTA0NDcwNDUzMjc4NjE3NjAw.GAJrjt.puUo3ND91vnKdBIUFrNYdTUnpUjeD4hictHMnk"
+  discordChannels:
+    listed: "1012084649238986963"
+    sold: "1012084601121947689"
+  nftMarketplaceAddress: "0x70b1f9e6a4d00baaf6972957f3b6a9f6c9f631b6"
   testnet: false
   zildexr:
     key: "cd66db4a-cfc8-4db3-951c-b9c633566196"
 
-replicas: 0
+replicas: 1

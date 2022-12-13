@@ -4,7 +4,7 @@ const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const config = require('./config.js')
 
 const testnetString = process.env.is_testnet ? "?network=testnet" : ""
-process.env.is_testnet ? console.log("INDEXER TESTNET") : console.log("INDEXER MAINNET") 
+console.log(`INDEXER is_testnet: ${process.env.is_testnet}`)
 const zilliqa = process.env.is_testnet ? new Zilliqa(config.testnet_zilliqa) : new Zilliqa(config.mainnet_zilliqa);
 
 const key = process.env.indexer_key
